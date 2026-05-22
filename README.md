@@ -4,7 +4,7 @@ Uma API RESTful projetada para gerenciar um catálogo de jogos e seus personagen
 
 ## 🔗 Documentação Pública
 A documentação interativa da API é gerada automaticamente e pode ser acessada aqui:
-**[link do GitHub]**
+**https://GustavoTalgatti.github.io/minha-api**
 
 ## 🚀 Endpoints Disponíveis
 * `GET /jogos` - Lista todos os jogos.
