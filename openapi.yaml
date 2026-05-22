@@ -66,6 +66,23 @@ paths:
         "404":
           description: "Jogo não encontrado"
 
+    delete:
+      summary: "Remover um jogo"
+      operationId: "deletarJogo"
+      tags: ["Jogos"]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "jogo-001"
+      responses:
+        "204":
+          description: "Jogo removido com sucesso"
+        "404":
+          description: "Jogo não encontrado"
+
   /personagens:
     get:
       summary: "Listar personagens"
