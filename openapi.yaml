@@ -1,0 +1,153 @@
+openapi: "3.0.3"
+info:
+  title: "API Universo dos Jogos"
+  version: "1.0.0"
+  description: "Documentação da API para gerenciamento de um catálogo de jogos e seus personagens."
+servers:
+  - url: "https://api.universodosjogos.com/v1"
+    description: "Servidor de Produção"
+
+tags:
+  - name: "Jogos"
+    description: "Endpoints relacionados aos jogos"
+  - name: "Personagens"
+    description: "Endpoints relacionados aos personagens dos jogos"
+
+paths:
+  /jogos:
+    get:
+      summary: "Listar jogos"
+      operationId: "listarJogos"
+      tags: ["Jogos"]
+      responses:
+        "200":
+          description: "Lista de jogos retornada com sucesso"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Jogo"
+    post:
+      summary: "Cadastrar novo jogo"
+      operationId: "criarJogo"
+      tags: ["Jogos"]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NovoJogo"
+      responses:
+        "201":
+          description: "Jogo criado com sucesso"
+        "400":
+          description: "Dados de envio inválidos"
+
+  /jogos/{id}:
+    get:
+      summary: "Buscar detalhes de um jogo"
+      operationId: "buscarJogo"
+      tags: ["Jogos"]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: "jogo-001"
+      responses:
+        "200":
+          description: "Jogo encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Jogo"
+        "404":
+          description: "Jogo não encontrado"
+
+  /personagens:
+    get:
+      summary: "Listar personagens"
+      operationId: "listarPersonagens"
+      tags: ["Personagens"]
+      responses:
+        "200":
+          description: "Lista de personagens"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Personagem"
+    post:
+      summary: "Cadastrar personagem"
+      operationId: "criarPersonagem"
+      tags: ["Personagens"]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NovoPersonagem"
+      responses:
+        "201":
+          description: "Personagem criado com sucesso"
+        "400":
+          description: "Dados de envio inválidos"
+
+components:
+  schemas:
+    Jogo:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "jogo-001"
+        titulo:
+          type: string
+          example: "The Last of Us"
+        genero:
+          type: string
+          example: "Ação e Sobrevivência"
+        anoLancamento:
+          type: integer
+          example: 2013
+
+    NovoJogo:
+      type: object
+      required: [titulo, genero]
+      properties:
+        titulo:
+          type: string
+          example: "God of War"
+        genero:
+          type: string
+          example: "Hack and slash"
+        anoLancamento:
+          type: integer
+          example: 2018
+
+    Personagem:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "char-001"
+        nome:
+          type: string
+          example: "Kratos"
+        jogoId:
+          type: string
+          example: "jogo-002"
+
+    NovoPersonagem:
+      type: object
+      required: [nome, jogoId]
+      properties:
+        nome:
+          type: string
+          example: "Ellie"
+        jogoId:
+          type: string
+          example: "jogo-001"

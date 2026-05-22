@@ -1,0 +1,43 @@
+name: CI/CD — API de Jogos
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Baixar o código
+        uses: actions/checkout@v4
+
+      - name: 2. Instalar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 3. Validar openapi.yaml com Spectral
+        run: npx --yes @stoplight/spectral-cli@6 lint openapi.yaml
+
+  publicar-docs:
+    needs: validar
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: 1. Baixar código
+        uses: actions/checkout@v4
+
+      - name: 2. Gerar HTML com Redoc
+        run: |
+          mkdir -p docs
+          npx --yes @redocly/cli build-docs openapi.yaml --output docs/index.html
+
+      - name: 3. Publicar no GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs
+          commit_message: "docs: documentação atualizada automaticamente"
